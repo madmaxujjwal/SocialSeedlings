@@ -2,19 +2,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import './feedpage.css'; 
+import './feedpage.css';
 
+const CustomInfiniteScroll = (props: any) => {
+  return <InfiniteScroll {...props}>{props.children}</InfiniteScroll>;
+};
 
 const UnsplashPhotos = () => {
-//   setTimeout(() => {
-//     
-// }, 2000);
   const [photos1, setPhotos1] = useState<any[]>([]);
   const [currentuser, setcurrentuser] = useState<string | null>(null);
 
   useEffect(() => {
     fetchPhotos();
-    alert('Click on the Profile to visit that profile');
+    
   }, []);
 
   const removeVar = () => {
@@ -24,7 +24,6 @@ const UnsplashPhotos = () => {
   const fetchPhotos1 = async () => {
     try {
       const ACCESS_KEY = 'XL8-E7k4J0xf9NggXm4Eh9EP7wqKgA3-vK5TsHGlRFk';
-      const perPage = 10;
       const response = await axios.get(
         `https://api.unsplash.com/photos/random/?client_id=${ACCESS_KEY}&count=30&username=${currentuser}`
       );
@@ -69,23 +68,22 @@ const UnsplashPhotos = () => {
 
   const handleClick = (username: string) => {
     setcurrentuser(username);
-    
     fetchPhotos1();
   };
 
   return (
     <div className="unsplash-container">
-     
       {!currentuser ? (
-        <div >
-          <h1 id='instafeed' style={{ color: 'black' }}>INSTAGRAM FEED</h1>
-          <InfiniteScroll
+        <div>
+          <h1 id="instafeed" style={{ color: 'black' }}>
+            INSTAGRAM FEED
+          </h1>
+          <CustomInfiniteScroll
             dataLength={photos1.length}
             next={fetchPhotos}
             hasMore={true}
             loader={<h4>Loading...</h4>}
           >
-            {/* Use the "unsplash-grid" class for grid view */}
             <div className="unsplash-grid">
               {photos1.map((photo) => (
                 <div key={photo.id} className="unsplash-photo">
@@ -103,12 +101,18 @@ const UnsplashPhotos = () => {
                 </div>
               ))}
             </div>
-          </InfiniteScroll>
+          </CustomInfiniteScroll>
         </div>
       ) : (
         <div className="unsplash-container">
-          <button id='gobackbutton' style={{ padding:'5px',margin:'10px',color:"red",display:'flex'}}onClick={() => removeVar()}>Go Back To Feed</button>
-          <h1 style={{ height:'15px',color: 'red' }}>USER:{currentuser}</h1>
+          <button
+            id="gobackbutton"
+            style={{ padding: '5px', margin: '10px', color: 'red', display: 'flex' }}
+            onClick={() => removeVar()}
+          >
+            Go Back To Feed
+          </button>
+          <h1 style={{ height: '15px', color: 'red' }}>USER:{currentuser}</h1>
           <div className="unsplash-grid">
             {photos1.map((photo) => (
               <div key={photo.id} className="unsplash-photo">
